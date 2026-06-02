@@ -13,7 +13,6 @@ class AppPrimaryButton extends StatelessWidget {
     required this.onPressed,
     this.fullWidth = false,
   });
-
   @override
   Widget build(BuildContext context) {
     final button = ElevatedButton.icon(
