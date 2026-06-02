@@ -11,7 +11,6 @@ class CityWeatherItem extends StatelessWidget {
     required this.temperature,
     required this.onTap,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
