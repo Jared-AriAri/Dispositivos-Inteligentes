@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import '../widgets/app_button.dart';
-import '../widgets/city_weather_item.dart';
 import 'detail_screen.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  const SearchScreen({super.key});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -13,77 +11,64 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   List<String> cities = ['Santiago', 'Querétaro', 'México'];
   List<String> filtered = [];
-  String query = '';
 
-  void filterCities(String value) {
+  void filterCities(String query) {
     setState(() {
-      query = value;
-
       filtered = cities
-          .where((c) => c.toLowerCase().contains(value.toLowerCase()))
+          .where((c) => c.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
 
-  String getTemperature(String city) {
-    if (city == 'Santiago') {
-      return '24°C';
-    }
-
-    if (city == 'Querétaro') {
-      return '22°C';
-    }
-
-    return '20°C';
-  }
-
   @override
   Widget build(BuildContext context) {
-    final visibleCities = query.isEmpty ? cities : filtered;
+    final visibleCities = filtered.isEmpty ? cities : filtered;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Buscar Ciudades'), centerTitle: true),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: TextField(
-              onChanged: filterCities,
-              decoration: const InputDecoration(
-                hintText: 'Busca una ciudad...',
-                border: OutlineInputBorder(),
+      appBar: AppBar(title: const Text('Buscar'), centerTitle: true),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: TextField(
+                onChanged: filterCities,
+                decoration: const InputDecoration(
+                  hintText: 'Buscar ciudad...',
+                  border: OutlineInputBorder(),
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: visibleCities.length,
-              itemBuilder: (context, index) {
-                final city = visibleCities[index];
+            Expanded(
+              child: ListView.builder(
+                itemCount: visibleCities.length,
+                itemBuilder: (context, index) {
+                  final city = visibleCities[index];
 
-                return CityWeatherItem(
-                  city: city,
-                  temperature: getTemperature(city),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailScreen(city: city),
-                      ),
-                    );
-                  },
-                );
-              },
+                  return ListTile(
+                    title: Text(city),
+                    subtitle: const Text('24°C'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailScreen(city: city),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: AppButton(
-              text: 'Atrás',
-              onPressed: () => Navigator.pop(context),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Atrás'),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

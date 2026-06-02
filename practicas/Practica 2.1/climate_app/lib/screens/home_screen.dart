@@ -1,15 +1,45 @@
 import 'package:flutter/material.dart';
-import '../widgets/app_button.dart';
-import '../widgets/weather_card.dart';
+import '../widgets/weather_icon.dart';
 import 'search_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isWide = width > 600;
+
+    final weatherContent = [
+      const Text(
+        '24°C',
+        style: TextStyle(
+          fontSize: 72,
+          fontWeight: FontWeight.bold,
+          color: Colors.blue,
+        ),
+      ),
+      const SizedBox(height: 16),
+      const Text(
+        'Santiago de Querétaro',
+        style: TextStyle(fontSize: 24),
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(height: 32),
+      const WeatherIcon(condition: 'cloudy'),
+      const SizedBox(height: 32),
+      const Text('Humedad: 65% | Viento: 12 km/h', textAlign: TextAlign.center),
+      const SizedBox(height: 40),
+      ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SearchScreen()),
+          );
+        },
+        child: const Text('Buscar Ciudades'),
+      ),
+    ];
 
     return Scaffold(
       appBar: AppBar(title: const Text('Clima Actual'), centerTitle: true),
@@ -21,52 +51,15 @@ class HomeScreen extends StatelessWidget {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Flexible(
-                        child: WeatherCard(
-                          temperature: '24°C',
-                          city: 'Santiago de Querétaro',
-                          condition: 'cloudy',
-                          humidity: '65%',
-                          wind: '12 km/h',
-                        ),
-                      ),
-                      const SizedBox(width: 24),
-                      AppButton(
-                        text: 'Buscar Ciudades',
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SearchScreen(),
-                            ),
-                          );
-                        },
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: weatherContent,
                       ),
                     ],
                   )
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const WeatherCard(
-                        temperature: '24°C',
-                        city: 'Santiago de Querétaro',
-                        condition: 'cloudy',
-                        humidity: '65%',
-                        wind: '12 km/h',
-                      ),
-                      const SizedBox(height: 40),
-                      AppButton(
-                        text: 'Buscar Ciudades',
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SearchScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                    children: weatherContent,
                   ),
           ),
         ),

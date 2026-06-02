@@ -8,7 +8,7 @@ class WeatherIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Icon(
-      condition == 'sunny' ? Icons.sunny : Icons.cloud,
+      condition == 'sunny' ? Icons.wb_sunny : Icons.cloud,
       size: 80,
       color: Colors.blue,
     );
