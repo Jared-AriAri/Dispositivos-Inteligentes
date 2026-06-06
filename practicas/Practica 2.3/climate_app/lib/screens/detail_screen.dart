@@ -6,7 +6,6 @@ class DetailScreen extends StatelessWidget {
   final String city;
 
   const DetailScreen({Key? key, required this.city}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
