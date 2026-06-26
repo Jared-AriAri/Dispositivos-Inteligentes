@@ -69,99 +69,141 @@ class _HomeScreenState extends State<HomeScreen> {
 
           final icon = WeatherUtils.getWeatherIcon(weather.condition);
 
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(icon, style: const TextStyle(fontSize: 80)),
-                  const SizedBox(height: 16),
-                  Text(
-                    '${weatherProvider.displayedTemperature}${weatherProvider.temperatureUnit}',
-                    style: const TextStyle(
-                      fontSize: 72,
-                      fontWeight: FontWeight.bold,
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        const Icon(Icons.bluetooth, size: 60),
+                        const SizedBox(height: 12),
+                        const Text(
+                          'Bluetooth BLE',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          weatherProvider.bleStatus,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: weatherProvider.startBleScan,
+                            icon: const Icon(Icons.bluetooth_searching),
+                            label: const Text('Buscar dispositivos'),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    weather.city,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(weather.condition, style: const TextStyle(fontSize: 20)),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Humidity: ${weather.humidity}%',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 32),
+                ),
 
-                  ElevatedButton(
-                    onPressed: weatherProvider.toggleTemperatureUnit,
-                    child: const Text('Cambiar unidad'),
-                  ),
+                const SizedBox(height: 16),
 
-                  const SizedBox(height: 12),
-
-                  OutlinedButton.icon(
-                    onPressed: openSearch,
-                    icon: const Icon(Icons.search),
-                    label: const Text('Buscar ciudad'),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  Text(
-                    weatherProvider.bleStatus,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      weatherProvider.startBleScan();
-                    },
-                    icon: const Icon(Icons.bluetooth_searching),
-                    label: const Text('Buscar dispositivos BLE'),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  SizedBox(
-                    height: 180,
-                    child: ListView.builder(
-                      itemCount: weatherProvider.bleDevices.length,
-                      itemBuilder: (context, index) {
-                        final result = weatherProvider.bleDevices[index];
-
-                        return Card(
-                          child: ListTile(
-                            leading: const Icon(Icons.bluetooth),
-                            title: Text(
-                              result.device.platformName.isEmpty
-                                  ? 'Dispositivo BLE'
-                                  : result.device.platformName,
+                if (weatherProvider.bleDevices.isNotEmpty)
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Dispositivos encontrados',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
-                            subtitle: Text(result.device.remoteId.toString()),
-                            onTap: () {
-                              weatherProvider.connectToDevice(result.device);
+                          ),
+                          const SizedBox(height: 12),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: weatherProvider.bleDevices.length,
+                            itemBuilder: (context, index) {
+                              final result = weatherProvider.bleDevices[index];
+
+                              return ListTile(
+                                leading: const Icon(Icons.bluetooth),
+                                title: Text(
+                                  result.device.platformName.isEmpty
+                                      ? 'Dispositivo BLE'
+                                      : result.device.platformName,
+                                ),
+                                subtitle: Text(
+                                  result.device.remoteId.toString(),
+                                ),
+                                onTap: () {
+                                  weatherProvider.connectToDevice(
+                                    result.device,
+                                  );
+                                },
+                              );
                             },
                           ),
-                        );
-                      },
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
+
+                const SizedBox(height: 24),
+
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        Text(icon, style: const TextStyle(fontSize: 90)),
+                        const SizedBox(height: 12),
+                        Text(
+                          '${weatherProvider.displayedTemperature}${weatherProvider.temperatureUnit}',
+                          style: const TextStyle(
+                            fontSize: 56,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          weather.city,
+                          style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(weather.condition),
+                        const SizedBox(height: 8),
+                        Text('Humidity: ${weather.humidity}%'),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: weatherProvider.toggleTemperatureUnit,
+                            child: const Text('Cambiar unidad'),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton.icon(
+                            onPressed: openSearch,
+                            icon: const Icon(Icons.search),
+                            label: const Text('Buscar ciudad'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },

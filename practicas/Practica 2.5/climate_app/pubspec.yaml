@@ -1,0 +1,27 @@
+name: climate_app
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  provider: ^6.1.5+1
+  flutter_blue_plus: ^1.31.0
+  http: ^1.2.1              # Para realizar peticiones HTTP a la API
+  flutter_dotenv: ^5.1.0    # Para gestionar variables de entorno de forma segura
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - .env                  # Registro del archivo de entorno
